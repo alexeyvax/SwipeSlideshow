@@ -1,5 +1,5 @@
 /**
- * 
+ * Create by alexeyvax 2016 <Alexey Vakhrushev alexeyvax1990@gmail.com>
  * 
  * @param containerSlideshow {HTMLElement}
  * @param animationTime {Number}
@@ -65,8 +65,6 @@ function SwipeSlideshow( containerSlideshow, animationTime )
 	initSlideshow();
 
 	const arrayBookmarksCollection = containerSlideshow.querySelectorAll( 'ul.bookmarks > li' );
-	
-	clickBookmarks();
 	
 	next.addEventListener( 'click', nextSlide );
 	prev.addEventListener( 'click', prevSlide );
@@ -146,30 +144,39 @@ function SwipeSlideshow( containerSlideshow, animationTime )
 		container.removeEventListener( 'touchmove', moveSwipe );
 		container.removeEventListener( 'touchend', endSwipe );
 		
-		setTimeout(() =>
-		{
-			container.classList.remove( DRAGGING );
-		},animationTime );
+		setTimeout(
+			() =>
+			{
+				container.classList.remove( DRAGGING );
+			},
+			animationTime
+		);
 		
 		if ( positionSwipe > SIZE_REZET_SWIPE )
 		{
 			prevSlide();
 			
-			setTimeout(() =>
-			{
-				container.style.left = '';
-			},animationTime );
+			setTimeout(
+				() =>
+				{
+					container.style.left = '';
+				},
+				animationTime
+			);
 		}
 		else if ( positionSwipe > 0
 			&& positionSwipe <= SIZE_REZET_SWIPE )
 		{
 			container.classList.add( BACK );
 			
-			setTimeout(() =>
-			{
-				container.classList.remove( BACK );
-				container.style.left = '';
-			},animationTime );
+			setTimeout(
+				() =>
+				{
+					container.classList.remove( BACK );
+					container.style.left = '';
+				},
+				animationTime
+			);
 		}
 		else if ( positionSwipe === 0 )
 		{
@@ -180,21 +187,27 @@ function SwipeSlideshow( containerSlideshow, animationTime )
 		{
 			nextSlide();
 			
-			setTimeout(() =>
-			{
-				container.style.left = '';
-			},animationTime );
+			setTimeout(
+				() =>
+				{
+					container.style.left = '';
+				},
+				animationTime
+			);
 		}
 		else if ( positionSwipe < 0
 			&& positionSwipe >= -SIZE_REZET_SWIPE )
 		{
 			container.classList.add( BACK );
 			
-			setTimeout(() =>
-			{
-				container.classList.remove( BACK );
-				container.style.left = '';
-			},animationTime );
+			setTimeout(
+				() =>
+				{
+					container.classList.remove( BACK );
+					container.style.left = '';
+				},
+				animationTime
+			);
 		}
 		
 		positionSwipe = 0;
@@ -245,15 +258,18 @@ function SwipeSlideshow( containerSlideshow, animationTime )
 		
 		container.classList.add( GOING_TO_NEXT );
 		
-		setTimeout(() =>
-		{
-			removeClassCurrent();
-			
-			container.classList.remove( GOING_TO_NEXT );
-			
-			initSlideshow();
-			isMove = false;
-		},animationTime );
+		setTimeout(
+			() =>
+			{
+				removeClassCurrent();
+				
+				container.classList.remove( GOING_TO_NEXT );
+				
+				initSlideshow();
+				isMove = false;
+			},
+			animationTime
+		);
 		
 	}
 	
@@ -308,15 +324,18 @@ function SwipeSlideshow( containerSlideshow, animationTime )
 		
 		container.classList.add( GOING_TO_PREV );
 		
-		setTimeout(() =>
-		{
-			removeClassCurrent();
-			
-			container.classList.remove( GOING_TO_PREV );
-			
-			initSlideshow();
-			isMove = false;
-		},animationTime );
+		setTimeout(
+			() =>
+			{
+				removeClassCurrent();
+				
+				container.classList.remove( GOING_TO_PREV );
+				
+				initSlideshow();
+				isMove = false;
+			},
+			animationTime
+		);
 	}
 	
 	/**
@@ -372,75 +391,74 @@ function SwipeSlideshow( containerSlideshow, animationTime )
 				bookmarksContainer.appendChild( bookmarks );
 			}
 		);
+		
+		bookmarksContainer.addEventListener( 'click', ( event ) => clickBookmarks( event ));
 	}
 	
-	/**
-	 * 
-	 */
-	function clickBookmarks()
+	function clickBookmarks( event )
 	{
-		Array.prototype.forEach.call(
-			arrayBookmarksCollection,
-			( item, index ) =>
+		const index = Array.prototype.indexOf.call(bookmarksContainer.children, event.target);
+		
+		if ( isMove
+			|| index === currentNumberSlide )
+		{
+			return;
+		}
+		
+		isMove = true;
+		
+		if ( currentNumberSlide < index )
+		{
+			nextNumberSlide = index;
+			
+			savedNextElement.classList.remove( NEXT );
+			savedNextElement = elementCollection[nextNumberSlide];
+			savedNextElement.classList.remove( PREV );
+			savedNextElement.classList.add( NEXT );
+			
+			container.classList.add( GOING_TO_NEXT );
+		}
+		else
+		{
+			prevNumberSlide = index;
+			
+			savedPrevElement.classList.remove( PREV );
+			savedPrevElement = elementCollection[prevNumberSlide];
+			savedPrevElement.classList.add( PREV );
+			
+			container.classList.add( GOING_TO_PREV );
+		}
+		
+		setTimeout(
+			() =>
 			{
-				item.onclick = () =>
+				removeClassCurrent();
+				
+				currentNumberSlide = index;
+				prevNumberSlide = currentNumberSlide - 1;
+				nextNumberSlide = currentNumberSlide + 1;
+				
+				if ( currentNumberSlide === elementCollection.length - 1 )
 				{
-					if ( isMove
-						|| index === currentNumberSlide )
-					{
-						return;
-					}
-					
-					isMove = true;
-					
-					if ( currentNumberSlide < index )
-					{
-						nextNumberSlide = index;
-						
-						savedNextElement.classList.remove( NEXT );
-						savedNextElement = elementCollection[nextNumberSlide];
-						savedNextElement.classList.add( NEXT );
-						container.classList.add( GOING_TO_NEXT );
-					}
-					else
-					{
-						prevNumberSlide = index;
-						
-						savedPrevElement.classList.remove( PREV );
-						savedPrevElement = elementCollection[prevNumberSlide];
-						savedPrevElement.classList.add( PREV );
-						container.classList.add( GOING_TO_PREV );
-					}
-					
-					setTimeout(() =>
-					{
-						removeClassCurrent();
-						currentNumberSlide = index;
-						prevNumberSlide = currentNumberSlide - 1;
-						nextNumberSlide = currentNumberSlide + 1;
-						
-						if ( currentNumberSlide === elementCollection.length - 1 )
-						{
-							nextNumberSlide = 0;
-						}
-						
-						if ( currentNumberSlide === 0 )
-						{
-							prevNumberSlide = elementCollection.length - 1;
-						}
-						
-						if ( container.classList.contains( GOING_TO_NEXT )
-						|| container.classList.contains( GOING_TO_PREV ) )
-						{
-							container.classList.remove( GOING_TO_NEXT );
-							container.classList.remove( GOING_TO_PREV );
-						}
-						
-						initSlideshow();
-						isMove = false;
-					},animationTime );
+					nextNumberSlide = 0;
 				}
-			}
+				
+				if ( currentNumberSlide === 0 )
+				{
+					prevNumberSlide = elementCollection.length - 1;
+				}
+				
+				if ( container.classList.contains( GOING_TO_NEXT )
+				|| container.classList.contains( GOING_TO_PREV ) )
+				{
+					container.classList.remove( GOING_TO_NEXT );
+					container.classList.remove( GOING_TO_PREV );
+				}
+				
+				initSlideshow();
+				isMove = false;
+			},
+			animationTime
 		);
 	}
 }
