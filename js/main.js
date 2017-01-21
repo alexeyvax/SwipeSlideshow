@@ -66,10 +66,10 @@ function SwipeSlideshow( containerSlideshow, animationTime )
 
 	const arrayBookmarksCollection = containerSlideshow.querySelectorAll( 'ul.bookmarks > li' );
 	
-	next.addEventListener( 'click', () => nextSlide() );
-	prev.addEventListener( 'click', () => prevSlide() );
-	container.addEventListener( 'touchstart', ( event ) => startSwipe( event ) );
-	container.addEventListener( 'mousedown', ( event ) => startSwipe( event ) );
+	next.addEventListener( 'click', nextSlide );
+	prev.addEventListener( 'click', prevSlide );
+	container.addEventListener( 'touchstart', startSwipe );
+	container.addEventListener( 'mousedown', startSwipe );
 	
 	/**
 	 * 
@@ -90,9 +90,9 @@ function SwipeSlideshow( containerSlideshow, animationTime )
 			
 			container.classList.add( DRAGGING );
 			
-			container.addEventListener( 'mousemove', ( event ) => moveSwipe( event ) );
-			container.addEventListener( 'mouseup', ( event ) => endSwipe( event ) );
-			document.addEventListener( 'mouseup', ( event ) => endSwipe( event ) );
+			container.addEventListener( 'mousemove', moveSwipe );
+			container.addEventListener( 'mouseup',endSwipe );
+			document.addEventListener( 'mouseup', endSwipe );
 		}
 		else
 		{
@@ -102,8 +102,8 @@ function SwipeSlideshow( containerSlideshow, animationTime )
 				
 				itemTargetTouches = event.targetTouches[0].pageX;
 				
-				container.addEventListener( 'touchmove', ( event ) => moveSwipe( event ) );
-				container.addEventListener( 'touchend', ( event ) => endSwipe( event ) );
+				container.addEventListener( 'touchmove', moveSwipe );
+				container.addEventListener( 'touchend', endSwipe );
 			}
 		}
 	}
