@@ -1,4 +1,9 @@
-
+/**
+ * 
+ * 
+ * @param containerSlideshow {HTMLElement}
+ * @param animationTime {Number}
+ */
 function SwipeSlideshow( containerSlideshow, animationTime )
 {
 	/** Булиты для отображения и управления слайдером */
@@ -26,7 +31,7 @@ function SwipeSlideshow( containerSlideshow, animationTime )
 	/** Контейнер со слайдами */
 	const container = containerSlideshow.querySelector( 'ul.slides' );
 	/** Коллекция слайдов */
-	const elementCollection = Array.prototype.slice.call( container.querySelectorAll( 'li' ) );
+	const elementCollection = Array.prototype.slice.call( container.querySelectorAll( 'li' ));
 	/** Контейнер букмарков */
 	const bookmarksContainer = containerSlideshow.querySelector( 'ul.bookmarks' );
 	/** Индекс предыдущего слайда */
@@ -54,7 +59,8 @@ function SwipeSlideshow( containerSlideshow, animationTime )
 	
 	createBookmarks();
 	
-	const bookmarksCollection = Array.prototype.slice.call( containerSlideshow.querySelectorAll( 'ul.bookmarks > li' ) );
+	const bookmarksCollection = Array.prototype.slice.call( 
+		containerSlideshow.querySelectorAll( 'ul.bookmarks > li' ));
 	
 	initSlideshow();
 
@@ -67,9 +73,15 @@ function SwipeSlideshow( containerSlideshow, animationTime )
 	container.addEventListener( 'touchstart', startSwipe );
 	container.addEventListener( 'mousedown', startSwipe );
 	
+	/**
+	 * 
+	 * 
+	 * @param event {Event}
+	 * @returns
+	 */
 	function startSwipe( event )
 	{
-		if ( container.classList.contains( DRAGGING ) )
+		if ( container.classList.contains( DRAGGING ))
 		{
 			return;
 		}
@@ -82,7 +94,7 @@ function SwipeSlideshow( containerSlideshow, animationTime )
 			
 			container.addEventListener( 'mousemove', moveSwipe );
 			container.addEventListener( 'mouseup',endSwipe );
-			document.addEventListener('mouseup', endSwipe);
+			document.addEventListener( 'mouseup', endSwipe );
 		}
 		else
 		{
@@ -93,11 +105,16 @@ function SwipeSlideshow( containerSlideshow, animationTime )
 				itemTargetTouches = event.targetTouches[0].pageX;
 				
 				container.addEventListener( 'touchmove', moveSwipe );
-				container.addEventListener('touchend', endSwipe);
+				container.addEventListener( 'touchend', endSwipe );
 			}
 		}
 	}
 	
+	/**
+	 * 
+	 * 
+	 * @param event {Event}
+	 */
 	function moveSwipe( event )
 	{
 		if ( event.type === 'mousemove' )
@@ -116,15 +133,20 @@ function SwipeSlideshow( containerSlideshow, animationTime )
 		}
 	}
 	
+	/**
+	 * 
+	 * 
+	 * @param event {Event}
+	 */
 	function endSwipe( event )
 	{
 		container.removeEventListener( 'mousemove', moveSwipe );
-		container.removeEventListener('mouseup', endSwipe);
-		document.removeEventListener('mouseup', endSwipe);
+		container.removeEventListener( 'mouseup', endSwipe );
+		document.removeEventListener( 'mouseup', endSwipe );
 		container.removeEventListener( 'touchmove', moveSwipe );
-		container.removeEventListener('touchend', endSwipe);
+		container.removeEventListener( 'touchend', endSwipe );
 		
-		setTimeout( () =>
+		setTimeout(() =>
 		{
 			container.classList.remove( DRAGGING );
 		},animationTime );
@@ -133,7 +155,7 @@ function SwipeSlideshow( containerSlideshow, animationTime )
 		{
 			prevSlide();
 			
-			setTimeout( () =>
+			setTimeout(() =>
 			{
 				container.style.left = '';
 			},animationTime );
@@ -143,7 +165,7 @@ function SwipeSlideshow( containerSlideshow, animationTime )
 		{
 			container.classList.add( BACK );
 			
-			setTimeout( () =>
+			setTimeout(() =>
 			{
 				container.classList.remove( BACK );
 				container.style.left = '';
@@ -158,7 +180,7 @@ function SwipeSlideshow( containerSlideshow, animationTime )
 		{
 			nextSlide();
 			
-			setTimeout( () =>
+			setTimeout(() =>
 			{
 				container.style.left = '';
 			},animationTime );
@@ -168,7 +190,7 @@ function SwipeSlideshow( containerSlideshow, animationTime )
 		{
 			container.classList.add( BACK );
 			
-			setTimeout( () =>
+			setTimeout(() =>
 			{
 				container.classList.remove( BACK );
 				container.style.left = '';
@@ -183,6 +205,9 @@ function SwipeSlideshow( containerSlideshow, animationTime )
 		return false;
 	};
 	
+	/**
+	 * 
+	 */
 	function initSlideshow()
 	{
 		savedCurrentElement = elementCollection[currentNumberSlide];
@@ -198,6 +223,11 @@ function SwipeSlideshow( containerSlideshow, animationTime )
 		savedBookmarkElement.classList.add( CURRENT );
 	}
 	
+	/**
+	 * 
+	 * 
+	 * @returns
+	 */
 	function nextSlide()
 	{
 		if ( isMove )
@@ -215,7 +245,7 @@ function SwipeSlideshow( containerSlideshow, animationTime )
 		
 		container.classList.add( GOING_TO_NEXT );
 		
-		setTimeout( () =>
+		setTimeout(() =>
 		{
 			removeClassCurrent();
 			
@@ -227,6 +257,11 @@ function SwipeSlideshow( containerSlideshow, animationTime )
 		
 	}
 	
+	/**
+	 * 
+	 * 
+	 * @returns
+	 */
 	function lastSlide()
 	{
 		if ( currentNumberSlide >= 2
@@ -251,6 +286,11 @@ function SwipeSlideshow( containerSlideshow, animationTime )
 		}
 	}
 	
+	/**
+	 * 
+	 * 
+	 * @returns
+	 */
 	function prevSlide()
 	{
 		if ( isMove )
@@ -268,7 +308,7 @@ function SwipeSlideshow( containerSlideshow, animationTime )
 		
 		container.classList.add( GOING_TO_PREV );
 		
-		setTimeout( () =>
+		setTimeout(() =>
 		{
 			removeClassCurrent();
 			
@@ -279,6 +319,11 @@ function SwipeSlideshow( containerSlideshow, animationTime )
 		},animationTime );
 	}
 	
+	/**
+	 * 
+	 * 
+	 * @returns
+	 */
 	function firstSlide()
 	{
 		if ( currentNumberSlide >= 1
@@ -303,6 +348,9 @@ function SwipeSlideshow( containerSlideshow, animationTime )
 		}
 	}
 	
+	/**
+	 * 
+	 */
 	function removeClassCurrent()
 	{
 		savedCurrentElement.classList.remove( CURRENT );
@@ -311,6 +359,9 @@ function SwipeSlideshow( containerSlideshow, animationTime )
 		savedBookmarkElement.classList.remove( CURRENT );
 	}
 	
+	/**
+	 * 
+	 */
 	function createBookmarks()
 	{
 		Array.prototype.forEach.call(
@@ -323,6 +374,9 @@ function SwipeSlideshow( containerSlideshow, animationTime )
 		);
 	}
 	
+	/**
+	 * 
+	 */
 	function clickBookmarks()
 	{
 		Array.prototype.forEach.call(
@@ -358,7 +412,7 @@ function SwipeSlideshow( containerSlideshow, animationTime )
 						container.classList.add( GOING_TO_PREV );
 					}
 					
-					setTimeout( () =>
+					setTimeout(() =>
 					{
 						removeClassCurrent();
 						currentNumberSlide = index;

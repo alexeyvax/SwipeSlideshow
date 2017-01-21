@@ -33,6 +33,7 @@ div.slide-show > ul.slides
 	
 	cursor: url("http://maps.gstatic.com/mapfiles/openhand_8_8.cur"), move;
 	list-style: none;
+	counter-reset: div;
 	
 	transition: none;
 }
@@ -102,6 +103,56 @@ div.slide-show > ul.slides > li > img
 	height: 100%;
 	
 	object-fit: cover;
+}
+
+ul.slides > li > div
+{
+	position: relative;
+	
+	width: 100%;
+	height: 100%;
+	
+	counter-increment: div;
+}
+
+ul.slides > li > div.turquoise
+{
+	background-color: turquoise;
+}
+ul.slides > li > div.red
+{
+	background-color: red;
+}
+ul.slides > li > div.blue
+{
+	background-color: blue;
+}
+ul.slides > li > div.purple
+{
+	background-color: purple;
+}
+ul.slides > li > div.green
+{
+	background-color: green;
+}
+ul.slides > li > div.brown
+{
+	background-color: brown;
+}
+
+ul.slides > li > div::before
+{
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	
+	width: 50px;
+	height: 50px;
+	
+	font-size: 50px;
+	content: counter(div);
+	
+	transform: translateX(-50%) translateY(-50%);
 }
 
 ul.bookmarks
