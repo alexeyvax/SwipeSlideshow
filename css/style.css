@@ -156,6 +156,7 @@ ul.bookmarks
 {
 	position: absolute;
 	bottom: 0;
+	left: 50px;
 	
 	display: block;
 	
