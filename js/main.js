@@ -57,6 +57,7 @@ function SwipeSlideshow( containerSlideshow, animationTime )
 	/** Минимальная величина для свайпа */
 	const SIZE_REZET_SWIPE = 100;
 	
+	initCssVariables();
 	createBookmarks();
 	
 	const bookmarksCollection = bookmarksContainer.children;
@@ -470,6 +471,11 @@ function SwipeSlideshow( containerSlideshow, animationTime )
 			},
 			animationTime
 		);
+	}
+	
+	function initCssVariables()
+	{
+		document.documentElement.style.setProperty('--animationTime', `${animationTime}ms`);
 	}
 }
 

@@ -3,6 +3,7 @@
 	--width: 100%;
 	--negatiweWidth: calc(var(--width) * -1);
 	--height: calc(100% * 9/16);
+	--animationTime: .5s;
 }
 
 div.slide-show
@@ -43,13 +44,13 @@ div.slide-show > ul.dragging
 div.slide-show > ul.slides.goingToNext
 {
 	left: calc(var(--negatiweWidth) * 2) !important;
-	transition: left .5s;
+	transition: left var(--animationTime);
 }
 
 div.slide-show > ul.slides.goingToPrev
 {
 	left: 0 !important;
-	transition: left .5s;
+	transition: left var(--animationTime);
 }
 
 div.slide-show > ul.slides.dragging
