@@ -31,7 +31,7 @@ function SwipeSlideshow( containerSlideshow, animationTime )
 	/** Контейнер со слайдами */
 	const container = containerSlideshow.querySelector( 'ul.slides' );
 	/** Коллекция слайдов */
-	const elementCollection = Array.prototype.slice.call( container.querySelectorAll( 'li' ));
+	const elementCollection = container.children;
 	/** Контейнер букмарков */
 	const bookmarksContainer = containerSlideshow.querySelector( 'ul.bookmarks' );
 	/** Индекс предыдущего слайда */
@@ -59,20 +59,29 @@ function SwipeSlideshow( containerSlideshow, animationTime )
 	
 	createBookmarks();
 	
-	const bookmarksCollection = Array.prototype.slice.call( 
-		containerSlideshow.querySelectorAll( 'ul.bookmarks > li' ));
+	const bookmarksCollection = bookmarksContainer.children;
 	
 	initSlideshow();
-
-	const arrayBookmarksCollection = containerSlideshow.querySelectorAll( 'ul.bookmarks > li' );
 	
-	next.addEventListener( 'click', nextSlide );
-	prev.addEventListener( 'click', prevSlide );
-	container.addEventListener( 'touchstart', startSwipe );
-	container.addEventListener( 'mousedown', startSwipe );
+	const boundDocumentStartSwipeHandler = ( event ) => startSwipe( event );
+	const boundDocumentMoveSwipeHandler = ( event ) => moveSwipe( event );
+	const boundDocumentEndSwipeHandler = ( event ) => endSwipe( event );
+	const unRegisterHandlers = () =>
+	{
+		container.removeEventListener( 'mousemove', boundDocumentMoveSwipeHandler );
+		container.removeEventListener( 'mouseup', boundDocumentEndSwipeHandler );
+		document.removeEventListener( 'mouseup', boundDocumentEndSwipeHandler );
+		container.removeEventListener( 'touchmove', boundDocumentMoveSwipeHandler );
+		container.removeEventListener( 'touchend', boundDocumentEndSwipeHandler );
+	};
+	
+	next.addEventListener( 'click', () => nextSlide() );
+	prev.addEventListener( 'click', () => prevSlide() );
+	container.addEventListener( 'touchstart', boundDocumentStartSwipeHandler );
+	container.addEventListener( 'mousedown', boundDocumentStartSwipeHandler );
 	
 	/**
-	 * 
+	 * Начало свайпа, захват слайда
 	 * 
 	 * @param event {Event}
 	 * @returns
@@ -90,9 +99,9 @@ function SwipeSlideshow( containerSlideshow, animationTime )
 			
 			container.classList.add( DRAGGING );
 			
-			container.addEventListener( 'mousemove', moveSwipe );
-			container.addEventListener( 'mouseup',endSwipe );
-			document.addEventListener( 'mouseup', endSwipe );
+			container.addEventListener( 'mousemove', boundDocumentMoveSwipeHandler );
+			container.addEventListener( 'mouseup',boundDocumentEndSwipeHandler );
+			document.addEventListener( 'mouseup', boundDocumentEndSwipeHandler );
 		}
 		else
 		{
@@ -102,14 +111,14 @@ function SwipeSlideshow( containerSlideshow, animationTime )
 				
 				itemTargetTouches = event.targetTouches[0].pageX;
 				
-				container.addEventListener( 'touchmove', moveSwipe );
-				container.addEventListener( 'touchend', endSwipe );
+				container.addEventListener( 'touchmove', boundDocumentMoveSwipeHandler );
+				container.addEventListener( 'touchend', boundDocumentEndSwipeHandler );
 			}
 		}
 	}
 	
 	/**
-	 * 
+	 * Движение слайда
 	 * 
 	 * @param event {Event}
 	 */
@@ -132,17 +141,13 @@ function SwipeSlideshow( containerSlideshow, animationTime )
 	}
 	
 	/**
-	 * 
+	 * Завершение движения(перетаскивания)
 	 * 
 	 * @param event {Event}
 	 */
 	function endSwipe( event )
 	{
-		container.removeEventListener( 'mousemove', moveSwipe );
-		container.removeEventListener( 'mouseup', endSwipe );
-		document.removeEventListener( 'mouseup', endSwipe );
-		container.removeEventListener( 'touchmove', moveSwipe );
-		container.removeEventListener( 'touchend', endSwipe );
+		unRegisterHandlers();
 		
 		setTimeout(
 			() =>
@@ -219,7 +224,7 @@ function SwipeSlideshow( containerSlideshow, animationTime )
 	};
 	
 	/**
-	 * 
+	 * Инициализация слайдера
 	 */
 	function initSlideshow()
 	{
@@ -237,7 +242,7 @@ function SwipeSlideshow( containerSlideshow, animationTime )
 	}
 	
 	/**
-	 * 
+	 * Переход на следующий слайд
 	 * 
 	 * @returns
 	 */
@@ -270,11 +275,10 @@ function SwipeSlideshow( containerSlideshow, animationTime )
 			},
 			animationTime
 		);
-		
 	}
 	
 	/**
-	 * 
+	 * Обработка зацикливания слайдера после последнего слайда
 	 * 
 	 * @returns
 	 */
@@ -303,7 +307,7 @@ function SwipeSlideshow( containerSlideshow, animationTime )
 	}
 	
 	/**
-	 * 
+	 * Переход на предыдущий слайд
 	 * 
 	 * @returns
 	 */
@@ -339,7 +343,7 @@ function SwipeSlideshow( containerSlideshow, animationTime )
 	}
 	
 	/**
-	 * 
+	 * Обработка зацикливания слайдера после первого слайда
 	 * 
 	 * @returns
 	 */
@@ -368,7 +372,7 @@ function SwipeSlideshow( containerSlideshow, animationTime )
 	}
 	
 	/**
-	 * 
+	 * Удаление классов со всех лишек
 	 */
 	function removeClassCurrent()
 	{
@@ -379,7 +383,7 @@ function SwipeSlideshow( containerSlideshow, animationTime )
 	}
 	
 	/**
-	 * 
+	 * Создание букмарков(точек навигации)
 	 */
 	function createBookmarks()
 	{
@@ -395,6 +399,12 @@ function SwipeSlideshow( containerSlideshow, animationTime )
 		bookmarksContainer.addEventListener( 'click', ( event ) => clickBookmarks( event ));
 	}
 	
+	/**
+	 * Обработка клика по букмаркам(точкам навигации)
+	 * 
+	 * @param event
+	 * @returns
+	 */
 	function clickBookmarks( event )
 	{
 		const index = Array.prototype.indexOf.call(bookmarksContainer.children, event.target);
