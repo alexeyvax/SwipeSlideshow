@@ -286,7 +286,7 @@ function SwipeSlideshow( containerSlideshow, animationTime )
 	function lastSlide()
 	{
 		if ( currentNumberSlide >= 2
-		&& elementCollection.length - 1 >  currentNumberSlide )
+			&& elementCollection.length - 1 >  currentNumberSlide )
 		{
 			return;
 		}
@@ -408,7 +408,7 @@ function SwipeSlideshow( containerSlideshow, animationTime )
 	 */
 	function clickBookmarks( event )
 	{
-		const index = Array.prototype.indexOf.call(bookmarksContainer.children, event.target);
+		const index = Array.prototype.indexOf.call( bookmarksContainer.children, event.target );
 		
 		if ( isMove
 			|| index === currentNumberSlide )
@@ -460,7 +460,7 @@ function SwipeSlideshow( containerSlideshow, animationTime )
 				}
 				
 				if ( container.classList.contains( GOING_TO_NEXT )
-				|| container.classList.contains( GOING_TO_PREV ) )
+				|| container.classList.contains( GOING_TO_PREV ))
 				{
 					container.classList.remove( GOING_TO_NEXT );
 					container.classList.remove( GOING_TO_PREV );
@@ -473,9 +473,12 @@ function SwipeSlideshow( containerSlideshow, animationTime )
 		);
 	}
 	
+	/**
+	 * Назначаю тайминг css переменной
+	 */
 	function initCssVariables()
 	{
-		document.documentElement.style.setProperty('--animationTime', `${animationTime}ms`);
+		document.documentElement.style.setProperty( '--animationTime', `${animationTime}ms` );
 	}
 }
 
