@@ -1,5 +1,5 @@
 /**
- * Create by alexeyvax 2016 <Alexey Vakhrushev alexeyvax1990@gmail.com>
+ * Create by alexeyvax 2015 <Alexey Vakhrushev alexeyvax1990@gmail.com>
  * 
  * @param containerSlideshow {HTMLElement}
  * @param animationTime {Number}
