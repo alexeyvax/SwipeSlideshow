@@ -265,3 +265,30 @@ div.controls > button.next:after
 	
 	transform: rotate( 45deg );
 }
+
+div.counter
+{
+	position: absolute;
+	bottom: 20px;
+	right: 50px;
+	
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	
+	width: 30px;
+}
+
+div.counter::before
+{
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	
+	width: 6px;
+	height: 100%;
+	
+	content: '/';
+	
+	transform: translate(-50%, -50%);
+}

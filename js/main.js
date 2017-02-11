@@ -59,6 +59,7 @@ function SwipeSlideshow( containerSlideshow, animationTime )
 	
 	initCssVariables();
 	createBookmarks();
+	initCounter();
 	
 	const bookmarksCollection = bookmarksContainer.children;
 	
@@ -240,6 +241,15 @@ function SwipeSlideshow( containerSlideshow, animationTime )
 		
 		savedBookmarkElement = bookmarksCollection[currentNumberSlide];
 		savedBookmarkElement.classList.add( CURRENT );
+		
+		containerSlideshow.dispatchEvent(
+			new CustomEvent(
+				'change:slide',
+				{
+					detail: true
+				}
+			)
+		);
 	}
 	
 	/**
@@ -471,6 +481,41 @@ function SwipeSlideshow( containerSlideshow, animationTime )
 			},
 			animationTime
 		);
+	}
+	
+	function initCounter()
+	{
+		const counter = containerSlideshow.querySelector( 'div.counter' );
+		
+		if ( !counter )
+		{
+			return;
+		}
+		
+		const listCounters = createCounter( counter );
+		
+		listCounters[0].textContent = currentNumberSlide + 1;
+		listCounters[1].textContent = elementCollection.length;
+		
+		containerSlideshow.addEventListener( 'change:slide', () => updateCurrentCount( listCounters[0] ) );
+	}
+	
+	function updateCurrentCount( currentCount )
+	{
+		currentCount.textContent = currentNumberSlide + 1;
+	}
+	
+	function createCounter( container )
+	{
+		const currentCount = document.createElement( 'span' );
+		const allCounts = document.createElement( 'span' );
+		currentCount.classList.add( 'current-count' );
+		allCounts.classList.add( 'all-counts' );
+		
+		container.appendChild( currentCount );
+		container.appendChild( allCounts );
+		
+		return [currentCount, allCounts];
 	}
 	
 	/**
