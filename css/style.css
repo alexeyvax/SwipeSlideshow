@@ -6,6 +6,12 @@
 	--animationTime: .5s;
 }
 
+body
+{
+	padding: 0;
+	margin: 0;
+}
+
 div.slide-show
 {
 	position: relative;
@@ -22,7 +28,8 @@ div.slide-show > ul.slides
 {
 	position: absolute;
 	top: 0;
-	left: var(--negatiweWidth);
+	/*left: var(--negatiweWidth);*/
+	transform: translate(calc(var(--negatiweWidth) / 3), 0);
 	
 	width: calc(var(--width) * 3);
 	height: 0;
@@ -43,25 +50,35 @@ div.slide-show > ul.dragging
 
 div.slide-show > ul.slides.goingToNext
 {
-	left: calc(var(--negatiweWidth) * 2) !important;
-	transition: left var(--animationTime);
+	/*left: calc(var(--negatiweWidth) * 2) !important;*/
+	/*left: var(--negatiweWidth);*/
+	transform: translate(calc((var(--negatiweWidth) / 3) * 2), 0) !important;
+	transition: transform var(--animationTime);
+	/*transition: left var(--animationTime);*/
 }
 
 div.slide-show > ul.slides.goingToPrev
 {
-	left: 0 !important;
-	transition: left var(--animationTime);
+	/*left: 0 !important;*/
+	/*left: 0;*/
+	transform: translate(0, 0) !important;
+	transition: transform var(--animationTime);
+	/*transition: left var(--animationTime);*/
 }
 
 div.slide-show > ul.slides.dragging
 {
-	left: var(--negatiweWidth);
+	/*left: var(--negatiweWidth);*/
+	transform: translate(calc(var(--negatiweWidth) / 3), 0);
 }
 
 div.slide-show > ul.slides.back
 {
-	left: var(--negatiweWidth) !important;
-	transition: left .3s;
+	/*left: var(--negatiweWidth);*/
+	/*left: var(--negatiweWidth) !important;*/
+	transform: translate(var(--negatiweWidth), 0) !important;
+	transition: transform .3s;
+	/*transition: left .3s;*/
 }
 
 div.slide-show > ul.slides > li
@@ -76,21 +93,23 @@ div.slide-show > ul.slides > li
 div.slide-show > ul.slides > li.current
 {
 	top: 0;
-	left: 50%;
-	
-	transform: translateX(-50%);
+	/*left: 50%;*/
+	transform: translate(var(--width), 0);
+	/*transform: translateX(-50%);*/
 }
 
 div.slide-show > ul.slides > li.prev
 {
 	top: 0;
-	left: 0;
+	/*left: 0;*/
+	transform: translate(0, 0);
 }
 
 div.slide-show > ul.slides > li.next
 {
 	top: 0;
-	right: 0;
+	/*right: 0;*/
+	transform: translate(calc(var(--width) * 2), 0);
 }
 
 div.slide-show > ul.slides > li > img
