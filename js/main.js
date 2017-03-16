@@ -570,7 +570,13 @@ function removeClass( element, className )
 	}
 }
 
-const containerSlideshow = document.querySelector( 'div.slide-show' );
+const listSlideshow = document.querySelectorAll( 'div.slide-show' );
 const animationTime = 500;
 
-new SwipeSlideshow( containerSlideshow, animationTime );
+Array.prototype.forEach.call(
+	listSlideshow,
+	( slideshow ) =>
+	{
+		new SwipeSlideshow( slideshow, animationTime );
+	}
+);
