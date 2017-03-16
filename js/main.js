@@ -342,7 +342,6 @@ function SwipeSlideshow( containerSlideshow, animationTime )
 		firstSlide();
 		
 		addClass( container, GOING_TO_PREV );
-		// container.style.transform = 'translate(0, 0)';
 		
 		setTimeout(
 			() =>
@@ -350,7 +349,6 @@ function SwipeSlideshow( containerSlideshow, animationTime )
 				removeClassCurrent();
 				
 				removeClass( container, GOING_TO_PREV );
-				// container.style.transform = '';
 				
 				initSlideshow();
 				isMove = false;
@@ -404,15 +402,18 @@ function SwipeSlideshow( containerSlideshow, animationTime )
 	 */
 	function createBookmarks()
 	{
+		const docFragment = document.createDocumentFragment();
+		
 		Array.prototype.forEach.call(
 			elementCollection,
 			() =>
 			{
-				bookmarks = document.createElement( 'li' );
-				bookmarksContainer.appendChild( bookmarks );
+				bookmark = document.createElement( 'li' );
+				docFragment.appendChild( bookmark );
 			}
 		);
 		
+		bookmarksContainer.appendChild( docFragment );
 		bookmarksContainer.addEventListener( 'click', ( event ) => clickBookmarks( event ));
 	}
 	
