@@ -1,5 +1,7 @@
 # Swipe slideshow
 
+This is simple swipe slideshow without any bundles and preprocessors.
+
 ## Install
 
 	git clone

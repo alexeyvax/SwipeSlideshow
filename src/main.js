@@ -360,7 +360,8 @@ function removeClasses(element, className) {
 }
 
 const listSlideshow = document.querySelectorAll('div.slide-show');
-const animationTime = 1000;
+/* set animation time */
+const animationTime = 500;
 
 Array.prototype.forEach.call(
   listSlideshow,
