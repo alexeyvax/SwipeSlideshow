@@ -6,308 +6,234 @@
 	--animationTime: .5s;
 }
 
-body
-{
+body {
 	padding: 0;
 	margin: 0;
 }
 
-div.slide-show
-{
+div.slide-show {
 	position: relative;
-	
 	overflow: hidden;
-	
 	height: 0;
 	padding: var(--height) 0 0 0;
 	width: var(--width);
 	margin: auto;
 }
 
-div.slide-show > ul.slides
-{
+div.slide-show > ul.slides {
 	position: absolute;
 	top: 0;
-	/*left: var(--negatiweWidth);*/
 	transform: translate(calc(var(--negatiweWidth) / 3), 0);
-	
 	width: calc(var(--width) * 3);
 	height: 0;
 	padding: var(--height) 0 0 0;
 	margin: 0;
-	
 	cursor: url("http://maps.gstatic.com/mapfiles/openhand_8_8.cur"), move;
 	list-style: none;
 	counter-reset: div;
-	
 	transition: none;
+	will-change: transform;
 }
 
-div.slide-show > ul.dragging
-{
+div.slide-show > ul.dragging {
 	cursor: url("http://maps.gstatic.com/mapfiles/closedhand_8_8.cur"), move;
 }
 
-div.slide-show > ul.slides.goingToNext
-{
-	/*left: calc(var(--negatiweWidth) * 2) !important;*/
-	/*left: var(--negatiweWidth);*/
+div.slide-show > ul.slides.goingToNext {
 	transform: translate(calc((var(--negatiweWidth) / 3) * 2), 0) !important;
 	transition: transform var(--animationTime);
-	/*transition: left var(--animationTime);*/
 }
 
-div.slide-show > ul.slides.goingToPrev
-{
-	/*left: 0 !important;*/
-	/*left: 0;*/
-	transform: translate(0, 0) !important;
+div.slide-show > ul.slides.goingToPrev {
+	transform: translate(0, 0) !important; /* Убрать потом */
 	transition: transform var(--animationTime);
-	/*transition: left var(--animationTime);*/
 }
 
-div.slide-show > ul.slides.dragging
-{
-	/*left: var(--negatiweWidth);*/
+div.slide-show > ul.slides.dragging {
 	transform: translate(calc(var(--negatiweWidth) / 3), 0);
 }
 
-div.slide-show > ul.slides.back
-{
-	/*left: var(--negatiweWidth);*/
-	/*left: var(--negatiweWidth) !important;*/
-	transform: translate(var(--negatiweWidth), 0) !important;
+div.slide-show > ul.slides.back {
+	transform: translate(calc(var(--negatiweWidth) / 3), 0) !important; /* Убрать потом */
 	transition: transform .3s;
-	/*transition: left .3s;*/
 }
 
-div.slide-show > ul.slides > li
-{
+div.slide-show > ul.slides > li {
 	position: absolute;
 	top: -100%;
-	
 	width: calc(var(--width) / 3);
 	height: 100%;
 }
 
-div.slide-show > ul.slides > li.current
-{
+div.slide-show > ul.slides > li.current {
 	top: 0;
-	/*left: 50%;*/
 	transform: translate(var(--width), 0);
-	/*transform: translateX(-50%);*/
 }
 
-div.slide-show > ul.slides > li.prev
-{
+div.slide-show > ul.slides > li.prev {
 	top: 0;
-	/*left: 0;*/
 	transform: translate(0, 0);
 }
 
-div.slide-show > ul.slides > li.next
-{
+div.slide-show > ul.slides > li.next {
 	top: 0;
-	/*right: 0;*/
 	transform: translate(calc(var(--width) * 2), 0);
 }
 
-div.slide-show > ul.slides > li > img
-{
+div.slide-show > ul.slides > li > img {
 	display: block;
-	
 	width: 100%;
 	height: 100%;
-	
 	object-fit: cover;
 }
 
-ul.slides > li > div
-{
+ul.slides > li > div {
 	position: relative;
-	
 	width: 100%;
 	height: 100%;
-	
 	counter-increment: div;
 }
 
-ul.slides > li > div.turquoise
-{
+ul.slides > li > div.turquoise {
 	background-color: turquoise;
 }
-ul.slides > li > div.red
-{
+ul.slides > li > div.red {
 	background-color: red;
 }
-ul.slides > li > div.blue
-{
+ul.slides > li > div.blue {
 	background-color: blue;
 }
-ul.slides > li > div.purple
-{
+ul.slides > li > div.purple {
 	background-color: purple;
 }
-ul.slides > li > div.green
-{
+ul.slides > li > div.green {
 	background-color: green;
 }
-ul.slides > li > div.brown
-{
+ul.slides > li > div.brown {
 	background-color: brown;
 }
 
-ul.slides > li > div::before
-{
+ul.slides > li > div::before {
 	position: absolute;
 	top: 50%;
 	left: 50%;
-	
 	width: 50px;
 	height: 50px;
-	
 	font-size: 50px;
 	content: counter(div);
-	
 	transform: translateX(-50%) translateY(-50%);
 }
 
-ul.bookmarks
-{
+ul.bookmarks {
 	position: absolute;
 	bottom: 0;
 	left: 50px;
-	
 	display: block;
-	
 	height: 20px;
 	padding: 0;
 }
 
-ul.bookmarks > li
-{
+ul.bookmarks > li {
 	position: relative;
-	
 	display: inline-block;
-	
 	width: 20px;
 	height: 20px;
 }
 
-ul.bookmarks > li:after
-{
+ul.bookmarks > li > input {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	padding: 0;
+	margin: 0;
+	opacity: 0;
+}
+
+ul.bookmarks > li:after {
 	position: absolute;
 	top: 50%;
 	left: 50%;
-	
 	width: 10px;
 	height: 10px;
 	margin-top: -5px;
 	margin-left: -5px;
-	
 	content: '';
 	cursor: pointer;
-	
 	border-radius: 50%;
-	
 	background: gray;
 }
 
-ul.bookmarks > li.current:after
-{
+ul.bookmarks > li.current:after {
 	background: red;
 }
 
-div.controls
-{
+div.controls {
 	position: absolute;
 	bottom: 40px;
 	left: 50%;
 }
 
-div.controls > button
-{
+div.controls > button {
 	position: absolute;
 	bottom: 0;
-	
 	width: 50px;
 	height: 50px;
-	
 	cursor: pointer;
 }
 
-div.controls > button.prev
-{
+div.controls > button.prev {
 	left: -60px;
 }
 
-div.controls > button.prev:after
-{
+div.controls > button.prev:after {
 	position: absolute;
 	top: 7px;
 	left: 16px;
 	z-index: 1;
-	
 	width: 30px;
 	height: 30px;
-	
 	content: '';
-	
 	border: 1px solid red;
 	border-right: none;
 	border-bottom: none;
-	
 	transform: rotate( -45deg );
 }
 
 
-div.controls > button.next
-{
+div.controls > button.next {
 	right: -60px;
 }
 
-div.controls > button.next:after
-{
+div.controls > button.next:after {
 	position: absolute;
 	top: 7px;
 	left: -2px;
 	z-index: 1;
-	
 	width: 30px;
 	height: 30px;
-	
 	content: '';
-	
 	border: 1px solid red;
 	border-left: none;
 	border-bottom: none;
-	
 	transform: rotate( 45deg );
 }
 
-div.counter
-{
+div.counter {
 	position: absolute;
 	bottom: 20px;
 	right: 50px;
-	
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	
 	width: 30px;
 }
 
-div.counter::before
-{
+div.counter::before {
 	position: absolute;
 	top: 50%;
 	left: 50%;
-	
 	width: 6px;
 	height: 100%;
-	
 	content: '/';
-	
 	transform: translate(-50%, -50%);
 }
