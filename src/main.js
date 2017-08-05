@@ -313,16 +313,16 @@ function SwipeSlideshow(containerSlideshow, animationTime) {
       'change:slide',
       () => listCounters[0].textContent = currentNumberSlide + 1);
   }
+}
 
-  function createCounter(container) {
-    const currentCount = document.createElement('span');
-    const allCounts = document.createElement('span');
-    addClasses(currentCount, 'current-count');
-    addClasses(allCounts, 'all-counts');
-    container.appendChild(currentCount);
-    container.appendChild(allCounts);
-    return [currentCount, allCounts];
-  }
+function createCounter(container) {
+  const currentCount = document.createElement('span');
+  const allCounts = document.createElement('span');
+  addClasses(currentCount, 'current-count');
+  addClasses(allCounts, 'all-counts');
+  container.appendChild(currentCount);
+  container.appendChild(allCounts);
+  return [currentCount, allCounts];
 }
 
 /* Set timing for css variables */
