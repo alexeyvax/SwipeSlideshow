@@ -33,7 +33,7 @@ function SwipeSlideshow(containerSlideshow, animationTime) {
   /* min size for swipe */
   const SIZE_REZET_SWIPE = 100;
   
-  initCssVariables();
+  initCssVariables(animationTime);
   createBookmarks();
   initCounter();
   
@@ -41,9 +41,9 @@ function SwipeSlideshow(containerSlideshow, animationTime) {
   
   initSlideshow();
   
-  const boundDocumentStartSwipeHandler = event => startSwipe(event);
-  const boundDocumentMoveSwipeHandler = event => moveSwipe(event);
-  const boundDocumentEndSwipeHandler = event => endSwipe(event);
+  const boundDocumentStartSwipeHandler = e => startSwipe(e);
+  const boundDocumentMoveSwipeHandler = e => moveSwipe(e);
+  const boundDocumentEndSwipeHandler = e => endSwipe(e);
   const unRegisterHandlers = () => {
     slidesContainer.removeEventListener('mousemove', boundDocumentMoveSwipeHandler);
     slidesContainer.removeEventListener('mouseup', boundDocumentEndSwipeHandler);
@@ -51,29 +51,29 @@ function SwipeSlideshow(containerSlideshow, animationTime) {
     slidesContainer.removeEventListener('touchmove', boundDocumentMoveSwipeHandler);
     slidesContainer.removeEventListener('touchend', boundDocumentEndSwipeHandler);
   };
-  
+
   buttonNext.addEventListener('click', () => nextSlide());
   buttonPrev.addEventListener('click', () => prevSlide());
   slidesContainer.addEventListener('touchstart', boundDocumentStartSwipeHandler);
   slidesContainer.addEventListener('mousedown', boundDocumentStartSwipeHandler);
   
   /* Swipe start */
-  function startSwipe(event) {
+  function startSwipe(e) {
     if (slidesContainer.classList.contains(DRAGGING)) {
       return;
     }
     
-    if (event.type === 'mousedown') {
-      shiftX = event.pageX;
+    if (e.type === 'mousedown') {
+      shiftX = e.pageX;
       addClasses(slidesContainer, DRAGGING);
       
       slidesContainer.addEventListener('mousemove', boundDocumentMoveSwipeHandler);
       slidesContainer.addEventListener('mouseup',boundDocumentEndSwipeHandler);
       document.addEventListener('mouseup', boundDocumentEndSwipeHandler);
     } else {
-      if (event.targetTouches.length === 1) {
+      if (e.targetTouches.length === 1) {
         addClasses(slidesContainer, DRAGGING);
-        itemTargetTouches = event.targetTouches[0].pageX;
+        itemTargetTouches = e.targetTouches[0].pageX;
         
         slidesContainer.addEventListener('touchmove', boundDocumentMoveSwipeHandler);
         slidesContainer.addEventListener('touchend', boundDocumentEndSwipeHandler);
@@ -82,15 +82,15 @@ function SwipeSlideshow(containerSlideshow, animationTime) {
   }
   
   /* Move slide */
-  function moveSwipe(event) {
-    if (event.type === 'mousemove') {
-      positionSwipe = event.pageX - shiftX;
+  function moveSwipe(e) {
+    if (e.type === 'mousemove') {
+      positionSwipe = e.pageX - shiftX;
       slidesContainer.style.transform = `
         translate(${-containerSlideshow.offsetWidth + positionSwipe}px, 0)
       `;
     } else {
-      if (event.targetTouches.length === 1) {
-        positionSwipe = event.targetTouches[0].pageX - itemTargetTouches;
+      if (e.targetTouches.length === 1) {
+        positionSwipe = e.targetTouches[0].pageX - itemTargetTouches;
         slidesContainer.style.transform = `
           translate(${-containerSlideshow.offsetWidth + positionSwipe}px, 0)
         `;
@@ -99,42 +99,39 @@ function SwipeSlideshow(containerSlideshow, animationTime) {
   }
   
   /* Ending swipe */
-  function endSwipe(event) {
+  function endSwipe(e) {
     unRegisterHandlers();
-    setTimeout(
-      () => removeClasses(slidesContainer, DRAGGING),
-      animationTime,
-    );
+    setTimeout(() => removeClasses(slidesContainer, DRAGGING), animationTime);
     
-    if (positionSwipe > SIZE_REZET_SWIPE) {
-      prevSlide();
-      setTimeout(
-        () => slidesContainer.style.transform = '',
-        animationTime,
-      );
-    } else if (positionSwipe > 0
-      && positionSwipe <= SIZE_REZET_SWIPE) {
-      addClasses(slidesContainer, CLASS_BACK);
-      setTimeout(() => {
-        removeClasses(slidesContainer, CLASS_BACK);
-        slidesContainer.style.transform = '';
-      }, animationTime);
-    } else if (positionSwipe === 0) {
-      event.preventDefault();
-      removeClasses(slidesContainer, DRAGGING);
-    } else if (positionSwipe < -SIZE_REZET_SWIPE) {
-      nextSlide();
-      setTimeout(
-        () => slidesContainer.style.transform = '',
-        animationTime,
-      );
-    } else if (positionSwipe < 0
-      && positionSwipe >= -SIZE_REZET_SWIPE) {
-      addClasses(slidesContainer, CLASS_BACK);
-      setTimeout(() => {
-        removeClasses(slidesContainer, CLASS_BACK);
-        slidesContainer.style.transform = '';
-      }, animationTime);
+    switch (true) {
+      case positionSwipe > SIZE_REZET_SWIPE:
+        prevSlide();
+        setTimeout(() => slidesContainer.style.transform = '', animationTime);
+        break;
+      case positionSwipe > 0
+        && positionSwipe <= SIZE_REZET_SWIPE:
+        addClasses(slidesContainer, CLASS_BACK);
+        setTimeout(() => {
+          removeClasses(slidesContainer, CLASS_BACK);
+          slidesContainer.style.transform = '';
+        }, animationTime);
+        break;
+      case positionSwipe === 0:
+        removeClasses(slidesContainer, DRAGGING);
+        break;
+      case positionSwipe < -SIZE_REZET_SWIPE:
+        nextSlide();
+        setTimeout(() => slidesContainer.style.transform = '', animationTime);
+        break;
+      case positionSwipe < 0
+        && positionSwipe >= -SIZE_REZET_SWIPE:
+        addClasses(slidesContainer, CLASS_BACK);
+        setTimeout(() => {
+          removeClasses(slidesContainer, CLASS_BACK);
+          slidesContainer.style.transform = '';
+        }, animationTime);
+        break;
+      default: removeClasses(slidesContainer, DRAGGING);
     }
     positionSwipe = 0;
   }
@@ -154,8 +151,7 @@ function SwipeSlideshow(containerSlideshow, animationTime) {
     savedBookmarkElement = bookmarksCollection[currentNumberSlide];
     addClasses(savedBookmarkElement, CLASS_CURRENT);
     
-    containerSlideshow.dispatchEvent(
-      new CustomEvent('change:slide', { detail: true }));
+    containerSlideshow.dispatchEvent(new CustomEvent('change:slide', { detail: true }));
   }
   
   /* Go to next slide */
@@ -182,18 +178,17 @@ function SwipeSlideshow(containerSlideshow, animationTime) {
   
   /* slider is infinite after the last slide */
   function lastSlide() {
-    if (currentNumberSlide >= 2
-      && slidesCollection.length - 1 > currentNumberSlide) {
-      return;
-    }
-    if (prevNumberSlide === slidesCollection.length) {
-      prevNumberSlide = 0;
-    }
-    if (currentNumberSlide === slidesCollection.length) {
-      currentNumberSlide = 0;
-    }
-    if (nextNumberSlide === slidesCollection.length) {
-      nextNumberSlide = 0;
+    switch (true) {
+      case currentNumberSlide >= 2
+        && slidesCollection.length - 1 > currentNumberSlide:
+        return;
+      case prevNumberSlide === slidesCollection.length:
+        return prevNumberSlide = 0;
+      case currentNumberSlide === slidesCollection.length:
+        return currentNumberSlide = 0;
+      case nextNumberSlide === slidesCollection.length:
+        return nextNumberSlide = 0;
+      default: return;
     }
   }
   
@@ -221,18 +216,17 @@ function SwipeSlideshow(containerSlideshow, animationTime) {
   
   /* slider is infinite after the first slide */
   function firstSlide() {
-    if (currentNumberSlide >= 1
-      && slidesCollection.length - 2 > currentNumberSlide) {
-      return;
-    }
-    if (prevNumberSlide < 0) {
-      prevNumberSlide = slidesCollection.length - 1;
-    }
-    if (currentNumberSlide < 0) {
-      currentNumberSlide = slidesCollection.length - 1;
-    }
-    if (nextNumberSlide < 0) {
-      nextNumberSlide = slidesCollection.length - 1;
+    switch (true) {
+      case currentNumberSlide >= 1
+        && slidesCollection.length - 2 > currentNumberSlide:
+        return;
+      case prevNumberSlide < 0:
+        return prevNumberSlide = slidesCollection.length - 1;
+      case currentNumberSlide < 0:
+        return currentNumberSlide = slidesCollection.length - 1;
+      case nextNumberSlide < 0:
+        return nextNumberSlide = slidesCollection.length - 1;
+      default: return;
     }
   }
   
@@ -258,12 +252,12 @@ function SwipeSlideshow(containerSlideshow, animationTime) {
       }
     );
     bookmarksContainer.appendChild(docFragment);
-    bookmarksContainer.addEventListener('click', event => clickBookmarks(event));
+    bookmarksContainer.addEventListener('click', e => clickBookmarks(e));
   }
   
   /* Handle click for bookmarks(navigation points) */
-  function clickBookmarks(event) {
-    const index = Array.prototype.indexOf.call(bookmarksContainer.children, event.target);
+  function clickBookmarks(e) {
+    const index = Array.prototype.indexOf.call(bookmarksContainer.children, e.target);
     if (isMoveActive
       || index === currentNumberSlide
       || index === -1) {
@@ -292,17 +286,16 @@ function SwipeSlideshow(containerSlideshow, animationTime) {
       currentNumberSlide = index;
       prevNumberSlide = currentNumberSlide - 1;
       nextNumberSlide = currentNumberSlide + 1;
+
       if (currentNumberSlide === slidesCollection.length - 1) {
         nextNumberSlide = 0;
-      }
-      if (currentNumberSlide === 0) {
+      } else if (currentNumberSlide === 0) {
         prevNumberSlide = slidesCollection.length - 1;
       }
       if (slidesContainer.classList.contains(GOING_TO_NEXT)
       || slidesContainer.classList.contains(GOING_TO_PREV)) {
         removeClasses(slidesContainer, GOING_TO_NEXT, GOING_TO_PREV);
       }
-      
       initSlideshow();
       isMoveActive = false;
     }, animationTime);
@@ -317,11 +310,8 @@ function SwipeSlideshow(containerSlideshow, animationTime) {
     listCounters[0].textContent = currentNumberSlide + 1;
     listCounters[1].textContent = slidesCollection.length;
     containerSlideshow.addEventListener(
-      'change:slide', () => updateCurrentCount(listCounters[0]));
-  }
-
-  function updateCurrentCount(currentCount) {
-    currentCount.textContent = currentNumberSlide + 1;
+      'change:slide',
+      () => listCounters[0].textContent = currentNumberSlide + 1);
   }
 
   function createCounter(container) {
@@ -333,11 +323,11 @@ function SwipeSlideshow(containerSlideshow, animationTime) {
     container.appendChild(allCounts);
     return [currentCount, allCounts];
   }
-  
-  /* Set timing for css variables */
-  function initCssVariables() {
-    document.documentElement.style.setProperty('--animationTime', `${animationTime}ms`);
-  }
+}
+
+/* Set timing for css variables */
+function initCssVariables(animationTime) {
+  document.documentElement.style.setProperty('--animationTime', `${animationTime}ms`);
 }
 
 /* Add some classes */
